@@ -328,10 +328,9 @@
         </div>
 
         <div class="form-section">
-            <form id="tourForm" action="https://formsubmit.co/info@industrium.site" method="POST">
+            <form id="tourForm" method="POST">
                 <input type="hidden" name="_subject" value="Новая заявка на промышленную экскурсию">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_replyto" value="info@industrium.site">
                 
                 <div class="form-group">
                     <label for="enterprise">Выберите предприятие <span class="required">*</span></label>
@@ -434,15 +433,28 @@
             
             const formData = new FormData(form);
             
-            // Отправка через FormSubmit
-            fetch(form.action, {
+            // Преобразуем FormData для отправки
+            const data = {
+                access_key: "e8567566-59a7-43e8-b2e2-bd8a3859a3be", // Получите на https://web3forms.com
+                subject: "Новая заявка на промышленную экскурсию",
+                from_name: "Форма записи на экскурсию",
+                Предприятие: formData.get('Предприятие'),
+                ФИО: formData.get('ФИО'),
+                Телефон: formData.get('Телефон'),
+                Дата_экскурсии: formData.get('Дата_экскурсии')
+            };
+            
+            // Отправка через Web3Forms
+            fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                body: formData,
                 headers: {
+                    'Content-Type': 'application/json',
                     'Accept': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
                     // Скрываем форму
                     form.style.display = 'none';
                     // Показываем сообщение
@@ -462,7 +474,8 @@
                     alert('Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.');
                 }
             }).catch(error => {
-                alert('Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.');
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке. Пожалуйста, проверьте подключение к интернету.');
             });
         });
     </script>
