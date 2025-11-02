@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Промышленный туризм в Брянской области</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .coat-of-arms {
+            width: 80px;
+            height: auto;
+        }
+
+        .company-logo {
+            width: 100px;
+            height: auto;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .enterprises-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 30px 20px;
+            background: #f8f9fa;
+            flex-wrap: wrap;
+        }
+
+        .enterprise-tab {
+            width: 140px;
+            height: 140px;
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .enterprise-tab:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .enterprise-tab.active {
+            border: 3px solid #2a5298;
+            transform: translateY(-5px);
+        }
+
+        .enterprise-tab img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: opacity 0.3s ease;
+        }
+
+        .enterprise-tab:hover img,
+        .enterprise-tab.show-info img {
+            opacity: 0;
+        }
+
+        .enterprise-info {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(42,82,152,0.95);
+            color: white;
+            padding: 12px;
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.7em;
+            line-height: 1.4;
+        }
+
+        .enterprise-info strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.1em;
+        }
+
+        .enterprise-tab:hover .enterprise-info,
+        .enterprise-tab.show-info .enterprise-info {
+            opacity: 1;
+        }
+
+        .form-section {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1em;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 3px rgba(42,82,152,0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            box-shadow: 0 10px 30px rgba(76,175,80,0.3);
+            animation: slideIn 0.5s ease;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .enterprises-tabs {
+                gap: 10px;
+                padding: 20px 10px;
+            }
+
+            .enterprise-tab {
+                width: 100px;
+                height: 100px;
+                padding: 10px;
+            }
+
+            .enterprise-info {
+                font-size: 0.7em;
+                padding: 10px;
+            }
+
+            .enterprise-info strong {
+                font-size: 1em;
+                margin-bottom: 4px;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+
+            .coat-of-arms {
+                width: 60px;
+            }
+
+            .company-logo {
+                width: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <img src="company-logo.png" alt="Логотип компании" class="company-logo">
+                <img src="image3.png" alt="Герб Брянской области" class="coat-of-arms">
+                <h1>Промышленный туризм в Брянской области</h1>
+                <img src="image3.png" alt="Герб Брянской области" class="coat-of-arms">
+                <img src="company-logo.png" alt="Логотип компании" class="company-logo">
+            </div>
+        </div>
+
+        <div class="enterprises-tabs">
+            <div class="enterprise-tab active" data-enterprise="АО ПО Бежицкая сталь">
+                <img src="image1.png" alt="Бежицкая сталь">
+                <div class="enterprise-info">
+                    <strong>Бежицкая сталь</strong>
+                    Крупнейший производитель вагонного литья в России. Выпускает вагонные тележки, автосцепы
+                </div>
+            </div>
+
+            <div class="enterprise-tab" data-enterprise="АО УК БМЗ Брянский машиностроительный завод">
+                <img src="image2.png" alt="БМЗ">
+                <div class="enterprise-info">
+                    <strong>БМЗ</strong>
+                    Завод берёт своё начало в XIX веке. Производит локомотивы, вагоны и дизельные двигатели
+                </div>
+            </div>
+
+            <div class="enterprise-tab" data-enterprise="ООО Термотрон-Завод">
+                <img src="image5.png" alt="Термотрон">
+                <div class="enterprise-info">
+                    <strong>Термотрон</strong>
+                    Электротехническое оборудование для обеспечения безопасности на железной дороге, в метрополитене
+                </div>
+            </div>
+
+            <div class="enterprise-tab" data-enterprise="АО Брянсксельмаш">
+                <img src="image4.png" alt="Брянсксельмаш">
+                <div class="enterprise-info">
+                    <strong>Брянсксельмаш</strong>
+                    Производство сельхоз техники: зерноуборочные и кормоуборочные комбайны и техника для посева
+                </div>
+            </div>
+
+            <div class="enterprise-tab" data-enterprise="ООО Дятьковский хрустальный завод">
+                <img src="image6.png" alt="Дятьковский хрустальный завод">
+                <div class="enterprise-info">
+                    <strong>Дятьковский хрусталь</strong>
+                    Существует с 1780 г. Изделия из хрусталя ручной работы: посуда, светильники, сувениры
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <form id="tourForm" method="POST">
+                <input type="hidden" name="_subject" value="Новая заявка на промышленную экскурсию">
+                <input type="hidden" name="_replyto" value="info@industrium.site">
+                
+                <div class="form-group">
+                    <label for="enterprise">Выберите предприятие <span class="required">*</span></label>
+                    <select id="enterprise" name="Предприятие" required>
+                        <option value="">-- Выберите предприятие --</option>
+                        <option value="АО ПО Бежицкая сталь">АО "ПО Бежицкая сталь"</option>
+                        <option value="АО УК БМЗ Брянский машиностроительный завод">АО УК БМЗ Брянский машиностроительный завод</option>
+                        <option value="ООО Термотрон-Завод">ООО «Термотрон-Завод»</option>
+                        <option value="АО Брянсксельмаш">АО «Брянсксельмаш»</option>
+                        <option value="ООО Дятьковский хрустальный завод">ООО «Дятьковский хрустальный завод»</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullname">Фамилия Имя Отчество <span class="required">*</span></label>
+                    <input type="text" id="fullname" name="ФИО" required placeholder="Иванов Иван Иванович">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Мобильный телефон <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="Телефон" required placeholder="+7 (900) 123-45-67" pattern="[+]?[0-9\s\(\)\-]{10,18}">
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Желаемая дата экскурсии <span class="required">*</span></label>
+                    <input type="date" id="date" name="Дата_экскурсии" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Записаться на экскурсию</button>
+            </form>
+
+            <div class="success-message" id="successMessage">
+                <div class="success-icon">✓</div>
+                <div><strong>Ваша заявка на экскурсию успешно отправлена!</strong></div>
+                <div style="margin-top: 10px; font-size: 0.9em;">Наш менеджер свяжется с Вами в ближайшее время</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Синхронизация выбора предприятия с вкладками
+        const tabs = document.querySelectorAll('.enterprise-tab');
+        const enterpriseSelect = document.getElementById('enterprise');
+
+        // Определяем, является ли устройство мобильным
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+        tabs.forEach(tab => {
+            if (isMobile) {
+                // Для мобильных устройств: клик переключает информацию
+                tab.addEventListener('click', () => {
+                    const isShowingInfo = tab.classList.contains('show-info');
+                    
+                    // Убираем show-info у всех
+                    tabs.forEach(t => t.classList.remove('show-info'));
+                    
+                    if (!isShowingInfo) {
+                        // Показываем информацию
+                        tab.classList.add('show-info');
+                    } else {
+                        // Если уже показана, скрываем и выбираем предприятие
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        const enterprise = tab.getAttribute('data-enterprise');
+                        enterpriseSelect.value = enterprise;
+                    }
+                });
+            } else {
+                // Для ПК: клик выбирает предприятие
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const enterprise = tab.getAttribute('data-enterprise');
+                    enterpriseSelect.value = enterprise;
+                });
+            }
+        });
+
+        enterpriseSelect.addEventListener('change', (e) => {
+            const selectedEnterprise = e.target.value;
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-enterprise') === selectedEnterprise) {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                }
+            });
+        });
+
+        // Установка минимальной даты (сегодня)
+        const dateInput = document.getElementById('date');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+
+        // Обработка формы
+        const form = document.getElementById('tourForm');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            
+            // Преобразуем FormData для отправки
+            const data = {
+                access_key: "e8567566-59a7-43e8-b2e2-bd8a3859a3be", // Получите на https://web3forms.com
+                subject: "Новая заявка на промышленную экскурсию",
+                from_name: "Форма записи на экскурсию",
+                Предприятие: formData.get('Предприятие'),
+                ФИО: formData.get('ФИО'),
+                Телефон: formData.get('Телефон'),
+                Дата_экскурсии: formData.get('Дата_экскурсии')
+            };
+            
+            // Отправка через Web3Forms
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Скрываем форму
+                    form.style.display = 'none';
+                    // Показываем сообщение
+                    successMessage.classList.add('show');
+                    
+                    // Через 5 секунд возвращаем форму и сбрасываем
+                    setTimeout(() => {
+                        form.style.display = 'block';
+                        successMessage.classList.remove('show');
+                        form.reset();
+                        // Сбрасываем выбор предприятия на первое
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tabs[0].classList.add('active');
+                        enterpriseSelect.value = tabs[0].getAttribute('data-enterprise');
+                    }, 5000);
+                } else {
+                    alert('Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.');
+                }
+            }).catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке. Пожалуйста, проверьте подключение к интернету.');
+            });
+        });
+    </script>
+</body>
+</html>
